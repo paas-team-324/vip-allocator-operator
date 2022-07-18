@@ -6,27 +6,21 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: virtualips.paas.org
+  name: ipgroups.paas.org
 spec:
   group: paas.org
   names:
-    kind: VirtualIP
-    listKind: VirtualIPList
-    plural: virtualips
+    kind: IPGroup
+    listKind: IPGroupList
+    plural: ipgroups
     shortNames:
-    - vip
-    singular: virtualip
-  scope: Namespaced
+    - ipg
+    singular: ipgroup
+  scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.service
-      name: Service
-      type: string
-    - jsonPath: .status.ip
-      name: IP
-      type: string
-    - jsonPath: .status.state
-      name: State
+    - jsonPath: .spec.segment
+      name: Segment
       type: string
     - jsonPath: .metadata.creationTimestamp
       name: AGE
@@ -34,7 +28,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: VirtualIP is the Schema for the virtualips API
+        description: IPGroup is the Schema for the ipgroups API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -49,37 +43,23 @@ spec:
           metadata:
             type: object
           spec:
-            description: VirtualIPSpec defines the desired state of VirtualIP
+            description: IPGroupSpec defines the desired state of IPGroup
             properties:
-              ip:
-                description: The IP address to give the vip
-                type: string
-              service:
-                description: Name of the service to be exposed
+              excludedIPs:
+                description: Exclude the following IPs from the specified segment
+                items:
+                  type: string
+                type: array
+              segment:
+                description: Segment in which to allocate the IP address
                 type: string
             required:
-            - service
+            - excludedIPs
+            - segment
             type: object
           status:
-            description: VirtualIPStatus defines the observed state of VirtualIP
-            properties:
-              clonedService:
-                type: string
-              gsm:
-                type: string
-              ip:
-                type: string
-              keepalivedGroup:
-                type: string
-              message:
-                type: string
-              service:
-                type: string
-              state:
-                type: string
+            description: IPGroupStatus defines the observed state of IPGroup
             type: object
-        required:
-        - spec
         type: object
     served: true
     storage: true

@@ -1,20 +1,24 @@
-# permissions for end users to view virtualips.
+# permissions for end users to edit ipgroups.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: virtualip-viewer-role
+  name: ipgroup-editor-role
 rules:
 - apiGroups:
   - paas.org
   resources:
-  - virtualips
+  - ipgroups
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
   - watch
 - apiGroups:
   - paas.org
   resources:
-  - virtualips/status
+  - ipgroups/status
   verbs:
   - get

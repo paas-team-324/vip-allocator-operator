@@ -34,8 +34,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 
-	paasv1 "github.com/paas-team-324/keepalived-allocator-operator/api/v1"
-	"github.com/paas-team-324/keepalived-allocator-operator/controllers"
+	paasv1 "github.com/paas-team-324/vip-allocator-operator/api/v1"
+	"github.com/paas-team-324/vip-allocator-operator/controllers"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -92,20 +92,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.VirtualIPReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("VirtualIP"),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "VirtualIP")
-		os.Exit(1)
-	}
-	if err = (&paasv1.VirtualIP{}).SetupWebhookWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create webhook", "webhook", "VirtualIP")
-		os.Exit(1)
-	}
 	mgr.GetWebhookServer().Register("/validate-paas-org-v1-ip", &webhook.Admission{Handler: &paasv1.IPValidationHandler{}})
 
+	if err = (&controllers.ServiceReconciler{
+		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("Service"),
+		Scheme: mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "Service")
+		os.Exit(1)
+	}
 	// +kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("health", healthz.Ping); err != nil {

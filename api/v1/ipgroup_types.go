@@ -23,12 +23,10 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-// GroupSegmentMappingSpec defines the desired state of GroupSegmentMapping
-type GroupSegmentMappingSpec struct {
-
-	// +kubebuilder:validation:Required
-	// Name of the matching KeepalivedGroup object
-	KeepalivedGroup string `json:"keepalivedGroup"`
+// IPGroupSpec defines the desired state of IPGroup
+type IPGroupSpec struct {
+	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+	// Important: Run "make" to regenerate code after modifying this file
 
 	// +kubebuilder:validation:Required
 	// Segment in which to allocate the IP address
@@ -39,37 +37,36 @@ type GroupSegmentMappingSpec struct {
 	ExcludedIPs []string `json:"excludedIPs"`
 }
 
-// GroupSegmentMappingStatus defines the observed state of GroupSegmentMapping
-type GroupSegmentMappingStatus struct {
+// IPGroupStatus defines the observed state of IPGroup
+type IPGroupStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
 
-// +kubebuilder:object:root=true
-// +kubebuilder:subresource:status
-// +kubebuilder:resource:shortName=gsm,scope=Cluster
-// +kubebuilder:printcolumn:name="Keepalived Group",type=string,JSONPath=`.spec.keepalivedGroup`
+//+kubebuilder:object:root=true
+//+kubebuilder:subresource:status
+// +kubebuilder:resource:shortName=ipg,scope=Cluster
 // +kubebuilder:printcolumn:name="Segment",type=string,JSONPath=`.spec.segment`
 // +kubebuilder:printcolumn:name="AGE",type=date,JSONPath=`.metadata.creationTimestamp`
 
-// GroupSegmentMapping is the Schema for the groupsegmentmappings API
-type GroupSegmentMapping struct {
+// IPGroup is the Schema for the ipgroups API
+type IPGroup struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   GroupSegmentMappingSpec   `json:"spec"`
-	Status GroupSegmentMappingStatus `json:"status,omitempty"`
+	Spec   IPGroupSpec   `json:"spec,omitempty"`
+	Status IPGroupStatus `json:"status,omitempty"`
 }
 
-// +kubebuilder:object:root=true
+//+kubebuilder:object:root=true
 
-// GroupSegmentMappingList contains a list of GroupSegmentMapping
-type GroupSegmentMappingList struct {
+// IPGroupList contains a list of IPGroup
+type IPGroupList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []GroupSegmentMapping `json:"items"`
+	Items           []IPGroup `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&GroupSegmentMapping{}, &GroupSegmentMappingList{})
+	SchemeBuilder.Register(&IPGroup{}, &IPGroupList{})
 }

@@ -1,9 +1,8 @@
 apiVersion: paas.org/v1
-kind: GroupSegmentMapping
+kind: IPGroup
 metadata:
-  name: keepalived-3
+  name: ipgroup-3
 spec:
-  keepalivedGroup: "group3"
   segment: "1.1.3.0/29"
   excludedIPs:
   - "1.1.3.0"
